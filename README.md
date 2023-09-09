@@ -6,6 +6,8 @@ Create .env.local file in the root folder:
 ```
 MONGODB_URI=""
 JWT_SECRET=""
+IGDB_CLIENT_ID=""
+IGDB_CLIENT_SECRET=""
 
 ```
 

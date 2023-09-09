@@ -3,7 +3,7 @@ import * as jose from 'jose';
 
 // filter middleware to run on specific paths.
 export const config = {
-  matcher: ['/api/auth'],
+  matcher: ['/api/auth','/api/gameList/addGame'],
 };
 
 const middleware = async (req) => {
@@ -25,6 +25,7 @@ const middleware = async (req) => {
     const { payload, protectedHeader } = await jose.jwtVerify(token, secret);
 
     if (payload.user.id) {
+      // add userId to cookie
       const response = NextResponse.next();
       response.cookies.set('userId', payload.user.id);
       return response;
