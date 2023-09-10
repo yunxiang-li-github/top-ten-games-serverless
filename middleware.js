@@ -3,7 +3,13 @@ import * as jose from 'jose';
 
 // filter middleware to run on specific paths.
 export const config = {
-  matcher: ['/api/auth','/api/gameList/addGame'],
+  matcher: [
+    '/api/auth',
+    '/api/gameList/addGame',
+    '/api/gameList/deleteGame/:gameId*',
+    '/api/gameList/getGameList',
+    '/api/gameList/updateGame/:gameId*',
+  ],
 };
 
 export default async function middleware(req) {
@@ -36,4 +42,4 @@ export default async function middleware(req) {
     console.log('auth middleware error: ' + err);
     return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
   }
-};
+}
