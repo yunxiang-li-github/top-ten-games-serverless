@@ -6,7 +6,7 @@ export const config = {
   matcher: ['/api/auth','/api/gameList/addGame'],
 };
 
-const middleware = async (req) => {
+export default async function middleware(req) {
   // Get token from header
   const token = req.headers.get('x-auth-token');
 
@@ -37,5 +37,3 @@ const middleware = async (req) => {
     return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
   }
 };
-
-export default middleware;
