@@ -5,6 +5,7 @@ import * as jose from 'jose';
 export const config = {
   matcher: [
     '/api/auth',
+    '/api/users/delete',
     '/api/gameList/addGame',
     '/api/gameList/deleteGame/:gameId*',
     '/api/gameList/getGameList',
