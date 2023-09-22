@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@lib/dbConnect';
 import User from '@models/User';
+import TopTen from '@models/TopTen';
 import bcrypt from 'bcryptjs';
 import ajv from '@lib/customAjvKeyword';
 import registerSchema from '@schemas/register';
@@ -42,6 +43,15 @@ export const POST = async (req) => {
     user.password = await bcrypt.hash(password, salt);
 
     await user.save();
+
+    // create empty top ten list for the user
+    const topTen = {
+      user: user.id,
+      topGames: [],
+    };
+
+    const newTopTen = new TopTen(topTen);
+    await newTopTen.save();
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
