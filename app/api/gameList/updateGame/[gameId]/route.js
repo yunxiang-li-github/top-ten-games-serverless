@@ -50,8 +50,7 @@ export const POST = async (req, { params }) => {
     });
 
     // save the game list
-    console.log(gameList.topGames);
-    // await gameList.save();
+    await gameList.save();
 
     return NextResponse.json({ msg: 'Game updated' }, { status: 200 });
   } catch (err) {
