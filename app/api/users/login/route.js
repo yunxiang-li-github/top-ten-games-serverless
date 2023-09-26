@@ -63,3 +63,16 @@ export const POST = async (req) => {
     return NextResponse.json({ msg: 'Server error' }, { status: 500 });
   }
 };
+
+export async function OPTIONS(request) {
+  const origin = request.headers.get('origin')
+
+  return new NextResponse(null, {
+      status: 204,
+      headers: {
+          'Access-Control-Allow-Origin': origin || '*',
+          'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      }
+  })
+}
