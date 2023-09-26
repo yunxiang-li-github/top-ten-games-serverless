@@ -3,10 +3,10 @@ import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User';
 import TopTen from '@/models/TopTen';
 
-// @route    POST api/gameList/getGameList
+// @route    GET api/gameList/getGameList
 // @desc     Get the game list
 // @access   Private
-export const POST = async (req) => {
+export const GET = async (req) => {
   await dbConnect();
 
   try {

@@ -7,7 +7,7 @@ import ajv from '@lib/customAjvKeyword';
 import loginSchema from '@schemas/login';
 const validate = ajv.compile(loginSchema);
 
-// @route    POST api/auth
+// @route    POST api/users/login
 // @desc     Authenticate user & get token
 // @access   Public
 export const POST = async (req) => {

@@ -7,7 +7,7 @@ import ajv from '@lib/customAjvKeyword';
 import registerSchema from '@schemas/register';
 const validate = ajv.compile(registerSchema);
 
-// @route    POST api/users
+// @route    POST api/users/register
 // @desc     Register user
 // @access   Public
 export const POST = async (req) => {
