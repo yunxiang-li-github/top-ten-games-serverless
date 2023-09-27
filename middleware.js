@@ -14,14 +14,14 @@ export const config = {
 };
 
 export const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, x-auth-token",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-auth-token',
 };
 
 export default async function middleware(req) {
   if (req.method === 'OPTIONS') {
-    return NextResponse.json({}, { headers: corsHeaders })
+    return NextResponse.json({}, { headers: corsHeaders });
   }
 
   // Get token from header
@@ -42,11 +42,16 @@ export default async function middleware(req) {
     const { payload, protectedHeader } = await jose.jwtVerify(token, secret);
 
     if (payload.user.id) {
-      // add userId to cookie
-      const response = NextResponse.next();
-      response.cookies.set('userId', payload.user.id);
+      // add userId to headers
+      // cookies somehow fails
 
-      return response;
+      const newHeaders = new Headers(req.headers);
+      newHeaders.set('userId', payload.user.id);
+      return NextResponse.next({
+        request: {
+          headers: newHeaders,
+        },
+      });
     } else {
       return NextResponse.json({ msg: 'Token is not valid' }, { status: 401 });
     }
