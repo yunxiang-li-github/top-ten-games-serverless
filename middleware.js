@@ -20,11 +20,9 @@ export const corsHeaders = {
 };
 
 export default async function middleware(req) {
-  const response = NextResponse.next();
-  response.headers.append('Access-Control-Allow-Origin', '*');
-  response.headers.append('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  response.headers.append('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-auth-token');
-  response.headers.append('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    return NextResponse.json({}, { headers: corsHeaders })
+  }
 
   // Get token from header
   const token = req.headers.get('x-auth-token');
@@ -56,8 +54,4 @@ export default async function middleware(req) {
     console.log('auth middleware error: ' + err);
     return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
   }
-}
-
-export async function OPTIONS(req) {
-  return NextResponse.json({}, { headers: corsHeaders });
 }
