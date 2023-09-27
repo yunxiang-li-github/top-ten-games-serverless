@@ -11,8 +11,8 @@ export const GET = async (req) => {
 
   try {
     // retrieve the user from headers
-    let userId = req.headers.get('userId')
-    
+    let userId = req.headers.get('userId');
+
     const user = await User.findById(userId).select('-password');
     // if no user found in cookie, return an error
     if (!user) {

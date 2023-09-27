@@ -13,7 +13,7 @@ export const DELETE = async (req) => {
 
   try {
     // retrieve the user from cookie
-    let userId = req.cookies.get('userId').value;
+    let userId = req.headers.get('userId');
 
     // remove the user
     await Promise.all([User.findOneAndRemove({ _id: userId })]);

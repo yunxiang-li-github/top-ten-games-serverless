@@ -8,7 +8,7 @@ import User from '@models/User';
 export const GET = async (req) => {
   await dbConnect();
   try {
-    let userId = req.cookies.get('userId').value;
+    let userId = req.headers.get('userId');
     const user = await User.findById(userId).select('-password');
     return NextResponse.json(user);
   } catch (err) {

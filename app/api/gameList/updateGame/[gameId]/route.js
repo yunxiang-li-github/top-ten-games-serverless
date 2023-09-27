@@ -14,7 +14,7 @@ export const POST = async (req, { params }) => {
 
   try {
     // retrieve the user from cookie
-    let userId = req.cookies.get('userId').value;
+    let userId = req.headers.get('userId');
     const user = await User.findById(userId).select('-password');
     // if no user found
     if (!user) {
