@@ -13,6 +13,12 @@ export const config = {
   ],
 };
 
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, x-auth-token",
+};
+
 export default async function middleware(req) {
   const response = NextResponse.next();
   response.headers.append('Access-Control-Allow-Origin', '*');
@@ -41,7 +47,7 @@ export default async function middleware(req) {
       // add userId to cookie
       const response = NextResponse.next();
       response.cookies.set('userId', payload.user.id);
-      
+
       return response;
     } else {
       return NextResponse.json({ msg: 'Token is not valid' }, { status: 401 });
@@ -50,4 +56,8 @@ export default async function middleware(req) {
     console.log('auth middleware error: ' + err);
     return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
   }
+}
+
+export async function OPTIONS(req) {
+  return NextResponse.json({}, { headers: corsHeaders });
 }
