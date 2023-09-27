@@ -35,6 +35,11 @@ export default async function middleware(req) {
       // add userId to cookie
       const response = NextResponse.next();
       response.cookies.set('userId', payload.user.id);
+
+      if (request.nextUrl.pathname.startsWith("/api")) {
+        response.headers.append("Access-Control-Allow-Origin", "*")
+      }
+      
       return response;
     } else {
       return NextResponse.json({ msg: 'Token is not valid' }, { status: 401 });
