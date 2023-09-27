@@ -14,6 +14,12 @@ export const config = {
 };
 
 export default async function middleware(req) {
+  const response = NextResponse.next();
+  response.headers.append('Access-Control-Allow-Origin', '*');
+  response.headers.append('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  response.headers.append('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-auth-token');
+  response.headers.append('Access-Control-Allow-Credentials', 'true');
+
   // Get token from header
   const token = req.headers.get('x-auth-token');
 
@@ -35,10 +41,6 @@ export default async function middleware(req) {
       // add userId to cookie
       const response = NextResponse.next();
       response.cookies.set('userId', payload.user.id);
-
-      if (request.nextUrl.pathname.startsWith("/api")) {
-        response.headers.append("Access-Control-Allow-Origin", "*")
-      }
       
       return response;
     } else {
