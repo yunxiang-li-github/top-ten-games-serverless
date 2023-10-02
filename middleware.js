@@ -6,6 +6,7 @@ export const config = {
   matcher: [
     '/api/auth',
     '/api/users/delete',
+    '/api/users/fetch',
     '/api/gameList/addGame',
     '/api/gameList/deleteGame/:gameId*',
     '/api/gameList/getGameList',
