@@ -46,13 +46,28 @@ export const POST = async (req) => {
       );
     }
 
+    // if the gameList already has ten games, return an error
+    if (gameList.topGames.length >= 10) {
+      return NextResponse.json(
+        { msg: 'Game list already has 10 games' },
+        { status: 400 }
+      );
+    }
+
     // fetch the game cover image URL
     const coverImageUrl = await getCoverImg(body.gameName);
+
+    // make name first letter uppercase in every word and the rest lowercase
+    const gameName = body.gameName
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+
 
     // add the game to the game list
     // rank is automatically added based on the number of games in the list, so it will always be the last one
     const newGame = {
-      name: body.gameName,
+      name: gameName,
       gameCoverURL: coverImageUrl,
       reviewDescription: body.reviewDescription,
       rank: gameList.topGames.length + 1,

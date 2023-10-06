@@ -40,7 +40,7 @@ export default async function middleware(req) {
 
   // Verify token
   try {
-    const { payload, protectedHeader } = await jose.jwtVerify(token, secret);
+    const { payload } = await jose.jwtVerify(token, secret);
 
     if (payload.user.id) {
       // add userId to headers

@@ -37,8 +37,6 @@ export const POST = async (req, { params }) => {
       game.rank = index + 1;
     });
 
-    console.log(gameList.topGames);
-
     await gameList.save();
 
     return NextResponse.json(
