@@ -4,7 +4,7 @@ import User from '@/models/User';
 import TopTen from '@/models/TopTen';
 
 // @route    GET api/gameList/getGameList
-// @desc     Get the game list
+// @desc     Get the game list for current user
 // @access   Private
 export const GET = async (req) => {
   await dbConnect();
@@ -21,7 +21,11 @@ export const GET = async (req) => {
 
     const gameList = await TopTen.findOne({ user: userId });
 
-    return NextResponse.json(gameList, { status: 200 });
+    // add user name to the output
+    const gameListObj = gameList.toObject();
+    gameListObj.userName = user.name;
+
+    return NextResponse.json(gameListObj, { status: 200 });
   } catch (err) {
     console.error(err.message);
     return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
