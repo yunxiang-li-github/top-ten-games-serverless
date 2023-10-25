@@ -22,7 +22,11 @@ export const GET = async (req, { params }) => {
 
     const gameList = await TopTen.findOne({ user: userId });
 
-    return NextResponse.json(gameList, { status: 200 });
+    // add user name to gameList
+    const gameListObj = gameList.toObject();
+    gameListObj.userName = user.name;
+
+    return NextResponse.json(gameListObj, { status: 200 });
   } catch (err) {
     console.error(err.message);
     return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
