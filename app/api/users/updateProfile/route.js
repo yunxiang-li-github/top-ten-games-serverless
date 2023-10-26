@@ -1,27 +1,34 @@
-// delete user
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User';
-import TopTen from '@/models/TopTen';
 
-// @route    DELETE api/users
-// @desc     Delete user
+// @route    POST api/users/updateProfile
+// @desc     update user profile
 // @access   Private
+export const POST = async (req) => {
+  const body = await req.json();
+  const { name, picId, bio } = body;
 
-export const DELETE = async (req) => {
   await dbConnect();
 
   try {
-    // retrieve the user from cookie
+    // retrieve the user from headers
     let userId = req.headers.get('userId');
 
-    // remove the user's top ten list
-    await Promise.all([TopTen.findOneAndRemove({ user: userId })]);
+    const user = await User.findById(userId).select('-password');
+    // if no user found in cookie, return an error
+    if (!user) {
+      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+    }
 
-    // remove the user
-    await Promise.all([User.findOneAndRemove({ _id: userId })]);
+    // update user profile
+    if (name) user.name = name;
+    if (picId) user.profilePicId = picId;
+    if (bio) user.profileBio = bio;
 
-    return NextResponse.json({ msg: 'User deleted' }, { status: 200 });
+    await user.save();
+
+    return NextResponse.json({ user }, { status: 200 });
   } catch (err) {
     console.error(err.message);
     return NextResponse.json({ msg: 'Server Error' }, { status: 500 });

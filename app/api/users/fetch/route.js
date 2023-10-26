@@ -21,6 +21,4 @@ export const POST = async (req) => {
     console.log(err);
     return NextResponse.json({ msg: 'Server error' }, { status: 500 });
   }
-
-  return NextResponse.json({ name }, { status: 200 });
 };

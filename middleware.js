@@ -7,6 +7,7 @@ export const config = {
     '/api/auth',
     '/api/users/delete',
     '/api/users/fetch',
+    '/api/users/updateProfile',
     '/api/gameList/addGame',
     '/api/gameList/deleteGame/:gameId*',
     '/api/gameList/getGameList',

@@ -21,7 +21,7 @@ export const POST = async (req) => {
   await dbConnect();
 
   try {
-    const { name, email, password } = body;
+    const { name, email, password, picId, bio } = body;
 
     let user = await User.findOne({ email });
     if (user) {
@@ -37,6 +37,8 @@ export const POST = async (req) => {
       name,
       email,
       password,
+      profilePicId: picId,
+      profileBio: bio,
     });
 
     const salt = await bcrypt.genSalt(10);
