@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@lib/dbConnect';
-import User from '@models/User';
-import bcrypt from 'bcryptjs';
-import * as jose from 'jose';
-import ajv from '@lib/customAjvKeyword';
-import loginSchema from '@schemas/login';
+import { NextResponse } from "next/server";
+import dbConnect from "@lib/dbConnect";
+import User from "@models/User";
+import bcrypt from "bcryptjs";
+import * as jose from "jose";
+import ajv from "@lib/customAjvKeyword";
+import loginSchema from "@schemas/login";
 const validate = ajv.compile(loginSchema);
 
 // @route    POST api/users/login
@@ -16,7 +16,7 @@ export const POST = async (req) => {
   // validate the user login form against the schema
   const valid = validate(body);
   if (!valid)
-    return NextResponse.json({ error: validate.errors }, { status: 400 });
+    return NextResponse.json({ errors: validate.errors }, { status: 400 });
 
   const { email, password } = body;
 
@@ -27,7 +27,7 @@ export const POST = async (req) => {
 
     if (!user) {
       return NextResponse.json(
-        { errors: [{ msg: 'Invalid Credentials' }] },
+        { errors: "Invalid Credentials" },
         { status: 400 }
       );
     }
@@ -36,7 +36,7 @@ export const POST = async (req) => {
 
     if (!isMatch) {
       return NextResponse.json(
-        { errors: [{ msg: 'Invalid Credentials' }] },
+        { errors: "Invalid Credentials" },
         { status: 400 }
       );
     }
@@ -50,31 +50,31 @@ export const POST = async (req) => {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
     const token = await new jose.SignJWT(payload)
-      .setProtectedHeader({ alg: 'HS256' })
+      .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setIssuer('urn:example:issuer')
-      .setAudience('urn:example:audience')
-      .setExpirationTime('3h')
+      .setIssuer("urn:example:issuer")
+      .setAudience("urn:example:audience")
+      .setExpirationTime("3h")
       .sign(secret);
 
     return NextResponse.json({ token: token }, { status: 200 });
   } catch (err) {
     console.error(err.message);
-    return NextResponse.json({ msg: 'Server error' }, { status: 500 });
+    return NextResponse.json({ errors: "Server error" }, { status: 500 });
   }
 };
 
 // CORS preflight request handler
 // hope vercel can fix this soon
 export async function OPTIONS(request) {
-  const origin = request.headers.get('origin');
+  const origin = request.headers.get("origin");
 
   return new NextResponse(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': origin || '*',
-      'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      "Access-Control-Allow-Origin": origin || "*",
+      "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
   });
 }

@@ -13,7 +13,7 @@ export const GET = async (req) => {
     return NextResponse.json(user);
   } catch (err) {
     console.error(err.message);
-    return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
+    return NextResponse.json({ errors: 'Server Error' }, { status: 500 });
   }
 };
 

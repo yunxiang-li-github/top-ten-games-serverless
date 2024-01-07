@@ -18,7 +18,7 @@ export const POST = async (req, { params }) => {
     const user = await User.findById(userId).select('-password');
     // if no user found
     if (!user) {
-      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+      return NextResponse.json({ errors: 'User not found' }, { status: 404 });
     }
 
     const gameList = await TopTen.findOne({ user: userId });
@@ -26,7 +26,7 @@ export const POST = async (req, { params }) => {
     // if the game does not exist in the list, return an error
     if (gameList.topGames.filter((game) => game._id == gameId).length === 0) {
       return NextResponse.json(
-        { msg: 'Game not found in the list' },
+        { errors: 'Game not found in the list' },
         { status: 404 }
       );
     }
@@ -55,7 +55,7 @@ export const POST = async (req, { params }) => {
     return NextResponse.json({ msg: 'Game updated' }, { status: 200 });
   } catch (err) {
     console.error(err.message);
-    return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
+    return NextResponse.json({ errors: 'Server Error' }, { status: 500 });
   }
 };
 

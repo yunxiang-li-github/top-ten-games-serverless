@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@lib/dbConnect';
-import User from '@models/User';
-import TopTen from '@models/TopTen';
-import bcrypt from 'bcryptjs';
-import ajv from '@lib/customAjvKeyword';
-import registerSchema from '@schemas/register';
+import { NextResponse } from "next/server";
+import dbConnect from "@lib/dbConnect";
+import User from "@models/User";
+import TopTen from "@models/TopTen";
+import bcrypt from "bcryptjs";
+import ajv from "@lib/customAjvKeyword";
+import registerSchema from "@schemas/register";
 const validate = ajv.compile(registerSchema);
 
 // @route    POST api/users/register
@@ -16,19 +16,17 @@ export const POST = async (req) => {
   // validate the user register form against the schema
   const valid = validate(body);
   if (!valid)
-    return NextResponse.json({ error: validate.errors }, { status: 400 });
+    return NextResponse.json({ errors: validate.errors }, { status: 400 });
 
   await dbConnect();
 
   try {
-    const { name, email, password, picId, bio } = body;
+    const { name, email, password, picId = 1, bio } = body;
 
     let user = await User.findOne({ email });
     if (user) {
       return NextResponse.json(
-        {
-          errors: [{ msg: 'User already exists' }],
-        },
+        { errors: "User already exists" },
         { status: 400 }
       );
     }
@@ -57,21 +55,22 @@ export const POST = async (req) => {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ success: false }, { status: 500 });
+    console.error(error.message);
+    return NextResponse.json({ errors: "Server Error" }, { status: 500 });
   }
 };
 
 // CORS preflight request handler
 // hope vercel can fix this soon
 export async function OPTIONS(request) {
-  const origin = request.headers.get('origin');
+  const origin = request.headers.get("origin");
 
   return new NextResponse(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': origin || '*',
-      'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      "Access-Control-Allow-Origin": origin || "*",
+      "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
   });
 }

@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import User from '@/models/User';
-import TopTen from '@/models/TopTen';
-import ajv from '@lib/customAjvKeyword';
-import addGameSchema from '@schemas/addGame';
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import User from "@/models/User";
+import TopTen from "@/models/TopTen";
+import ajv from "@lib/customAjvKeyword";
+import addGameSchema from "@schemas/addGame";
 const validate = ajv.compile(addGameSchema);
-import { getCoverImg } from '@/lib/igdb';
+import { getCoverImg } from "@/lib/igdb";
 
 // @route    POST api/gameList/addGame
 // @desc     Add a game to the game list
@@ -16,20 +16,20 @@ export const POST = async (req) => {
   // validation
   const valid = validate(body);
   if (!valid) {
-    return NextResponse.json(validate.errors, { status: 400 });
+    return NextResponse.json({ errors: validate.errors }, { status: 400 });
   }
 
   await dbConnect();
 
   try {
     // retrieve the user from cookie
-    let userId = req.headers.get('userId');
+    let userId = req.headers.get("userId");
 
-    const user = await User.findById(userId).select('-password');
+    const user = await User.findById(userId).select("-password");
 
     // if no user found
     if (!user) {
-      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+      return NextResponse.json({ errors: "User not found" }, { status: 404 });
     }
 
     const gameList = await TopTen.findOne({ user: userId });
@@ -41,7 +41,7 @@ export const POST = async (req) => {
       ).length > 0
     ) {
       return NextResponse.json(
-        { msg: 'Game already in the list' },
+        { errors: "Game already in the list" },
         { status: 400 }
       );
     }
@@ -49,7 +49,7 @@ export const POST = async (req) => {
     // if the gameList already has ten games, return an error
     if (gameList.topGames.length >= 10) {
       return NextResponse.json(
-        { msg: 'Game list already has 10 games' },
+        { msg: "Game list already has 10 games" },
         { status: 400 }
       );
     }
@@ -59,10 +59,9 @@ export const POST = async (req) => {
 
     // make name first letter uppercase in every word and the rest lowercase
     const gameName = body.gameName
-      .split(' ')
+      .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-
+      .join(" ");
 
     // add the game to the game list
     // rank is automatically added based on the number of games in the list, so it will always be the last one
@@ -81,21 +80,21 @@ export const POST = async (req) => {
     return NextResponse.json(gameList.topGames);
   } catch (err) {
     console.error(err.message);
-    return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
+    return NextResponse.json({ msg: "Server Error" }, { status: 500 });
   }
 };
 
 // CORS preflight request handler
 // hope vercel can fix this soon
 export async function OPTIONS(request) {
-  const origin = request.headers.get('origin');
+  const origin = request.headers.get("origin");
 
   return new NextResponse(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': origin || '*',
-      'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      "Access-Control-Allow-Origin": origin || "*",
+      "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
   });
 }

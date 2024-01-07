@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import User from '@/models/User';
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import User from "@/models/User";
 
 // @route    POST api/users/updateProfile
 // @desc     update user profile
@@ -13,12 +13,12 @@ export const POST = async (req) => {
 
   try {
     // retrieve the user from headers
-    let userId = req.headers.get('userId');
+    let userId = req.headers.get("userId");
 
-    const user = await User.findById(userId).select('-password');
+    const user = await User.findById(userId).select("-password");
     // if no user found in cookie, return an error
     if (!user) {
-      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+      return NextResponse.json({ errors: "User not found" }, { status: 404 });
     }
 
     // update user profile
@@ -31,21 +31,21 @@ export const POST = async (req) => {
     return NextResponse.json({ user }, { status: 200 });
   } catch (err) {
     console.error(err.message);
-    return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
+    return NextResponse.json({ errors: "Server Error" }, { status: 500 });
   }
 };
 
 // CORS preflight request handler
 // hope vercel can fix this soon
 export async function OPTIONS(request) {
-  const origin = request.headers.get('origin');
+  const origin = request.headers.get("origin");
 
   return new NextResponse(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': origin || '*',
-      'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      "Access-Control-Allow-Origin": origin || "*",
+      "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
   });
 }

@@ -32,7 +32,7 @@ export default async function middleware(req) {
   // Check if no token
   if (!token) {
     return NextResponse.json(
-      { msg: 'No token, authorization denied' },
+      { errors: 'No token, authorization denied' },
       { status: 401 }
     );
   }
@@ -55,10 +55,10 @@ export default async function middleware(req) {
         },
       });
     } else {
-      return NextResponse.json({ msg: 'Token is not valid' }, { status: 401 });
+      return NextResponse.json({ errors: 'Token is not valid' }, { status: 401 });
     }
   } catch (err) {
     console.log('auth middleware error: ' + err);
-    return NextResponse.json({ msg: 'Server Error' }, { status: 500 });
+    return NextResponse.json({ errors: 'Server Error' }, { status: 500 });
   }
 }
