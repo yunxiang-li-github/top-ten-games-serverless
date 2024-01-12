@@ -18,7 +18,7 @@ export const POST = async (req) => {
     const user = await User.findById(userId).select("-password");
     // if no user found in cookie, return an error
     if (!user) {
-      return NextResponse.json({ errors: "User not found" }, { status: 404 });
+      return NextResponse.json({ errors: ["User not found"] }, { status: 404 });
     }
 
     // update user profile
@@ -31,7 +31,7 @@ export const POST = async (req) => {
     return NextResponse.json({ user }, { status: 200 });
   } catch (err) {
     console.error(err.message);
-    return NextResponse.json({ errors: "Server Error" }, { status: 500 });
+    return NextResponse.json({ errors: ["Server Error"] }, { status: 500 });
   }
 };
 

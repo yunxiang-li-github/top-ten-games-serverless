@@ -21,12 +21,12 @@ export const POST = async (req) => {
   await dbConnect();
 
   try {
-    const { name, email, password, picId = 1, bio } = body;
+    const { name, email, password, picId = "1.png", bio } = body;
 
     let user = await User.findOne({ email });
     if (user) {
       return NextResponse.json(
-        { errors: "User already exists" },
+        { errors: ["User already exists"] },
         { status: 400 }
       );
     }
@@ -56,7 +56,7 @@ export const POST = async (req) => {
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error(error.message);
-    return NextResponse.json({ errors: "Server Error" }, { status: 500 });
+    return NextResponse.json({ errors: ["Server Error"] }, { status: 500 });
   }
 };
 

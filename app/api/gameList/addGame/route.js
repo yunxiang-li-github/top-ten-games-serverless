@@ -29,7 +29,7 @@ export const POST = async (req) => {
 
     // if no user found
     if (!user) {
-      return NextResponse.json({ errors: "User not found" }, { status: 404 });
+      return NextResponse.json({ errors: ["User not found"] }, { status: 404 });
     }
 
     const gameList = await TopTen.findOne({ user: userId });
@@ -41,7 +41,7 @@ export const POST = async (req) => {
       ).length > 0
     ) {
       return NextResponse.json(
-        { errors: "Game already in the list" },
+        { errors: ["Game already in the list"] },
         { status: 400 }
       );
     }
@@ -49,7 +49,7 @@ export const POST = async (req) => {
     // if the gameList already has ten games, return an error
     if (gameList.topGames.length >= 10) {
       return NextResponse.json(
-        { errors: "Game list already has 10 games" },
+        { errors: ["Game list already has 10 games"] },
         { status: 400 }
       );
     }
@@ -80,7 +80,7 @@ export const POST = async (req) => {
     return NextResponse.json(gameList.topGames);
   } catch (err) {
     console.error(err.message);
-    return NextResponse.json({ errors: "Server Error" }, { status: 500 });
+    return NextResponse.json({ errors: ["Server Error"] }, { status: 500 });
   }
 };
 

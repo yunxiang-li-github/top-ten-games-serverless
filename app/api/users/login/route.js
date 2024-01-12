@@ -27,7 +27,7 @@ export const POST = async (req) => {
 
     if (!user) {
       return NextResponse.json(
-        { errors: "Invalid Credentials" },
+        { errors: ["Invalid Credentials"] },
         { status: 400 }
       );
     }
@@ -36,7 +36,7 @@ export const POST = async (req) => {
 
     if (!isMatch) {
       return NextResponse.json(
-        { errors: "Invalid Credentials" },
+        { errors: ["Invalid Credentials"] },
         { status: 400 }
       );
     }
